@@ -481,7 +481,7 @@ then commands
 [else commands3]
 fi
 ```
-Exmaples:
+Examples:
 ```bash
 if [ $counter -lt 10 ]
 then number=0$counter
