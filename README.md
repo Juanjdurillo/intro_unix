@@ -8,50 +8,43 @@
 # Introduction to UNIX
 
 ---
-
-
 ## Why UNIX?
+* One of the most used operating systems nowadays
+	* Very popular in the academic world, government agencies, and industry
 
+* Different variants of UNIX, yet all of them share some basic features (conforming to several standards)
+	* Hierarchical file system
+	* Identical interfaces for data, devices and interprocess communication
+	* Background processes and daemons
+	* Synchronous and asynchronous processing
+	* Standardized tools
+	* High degree of portability
 
-
-1. One of the most used operating systems nowadays
-	* Very popular in the academic world, government agencies, and many companies
-
-2. Different variants of UNIX but all of them share some basic features (conforming to several standards)
-	1. Hierarchical file system
-	2. Identical interfaces for data, devices and interprocess communication
-	3. Background processing and daemons
-	4. Synchronous and asynchronous processing
-	5. Standardized tools
-	6. High degree of portability
-
-3. Linux is based on Unix
+* Linux is based on Unix
 	* Aims to conform to the various UNIX standard, but no Linux distribution is branded as UNIX
 	* The main problems are time and expenses 
-	* Nevertheless, its de facto near-conformance with UNIX standards, is what have enabled Linux success in the UNIX market
+	* Its de facto near-conformance with UNIX standards, is what have enabled Linux success in the UNIX market
 
 ---
-
 # A bit of UNIX history
 * 1969: Development started by Ken Thompson at Bell Laboratories (AT&T corporation)
 	* Written in assembly code for a digital PDP-7 computer
 	* Some ideas taken from MULTICs (Multiplexed Information and Computing Service)
-		* MULTICs is an earlier operating system project collaboration between AT&T and MIT
-		* AT&T windrew from this project, fustrated at the failure to devleop an economically viable and usable OS
+		* MULTICs is an earlier operating system (project collaboration between AT&T and MIT)
+		* AT&T withdrew from MULTICs, frustrated at the failure to develop an economically viable and usable OS
 		* Indeed Brian Kernigham (one of the fathers of the C programming language and also researcher at Bells labs at the time) called it UNICs (Uniplexed Information and Computing Service), name which derived later into UNIX
 
-* 1970: Unix is rewritten in assembly language for another computer (the PDP 11 back then a powerful machine)
-	* Vestiges of this PDP-11 heritage can be found in varios names still in used in most UNIX implementations, including Linux
+* 1970: Unix is rewritten in assembly language for another computer (the PDP11 back then a powerful machine)
+	* Vestiges of this PDP-11 heritage can be found in various names still in used in most UNIX implementations, including Linux
 
 ---
-
 # A bit of UNIX history
-* A landmark we cannot omitt in the UNIX history is the design and implementation of the C programming language by Dennis Ritchie and Kernigham
+* A landmark we cannot omit in the UNIX history is the design and implementation of the C programming language by Dennis Ritchie and Kernigham
 
-* 1973: The C language was mature to a point where UNIX kernel could be almost enterely written in C
+* 1973: The C language was mature to a point where UNIX kernel could be almost entirely written in C
 	* UNIX became one of the earliest operating systems to be written in a high-level language
-	* This fact made subsequent portings of UNIX to other hardware architectures possible
-	* It also explains why C (also C++) have come to be used so wideley as system programming languages today
+	* This fact made subsequent porting of UNIX to other hardware architectures possible
+	* It also explains why C (also C++) have come to be used so widely as system programming languages today
 
 ---
 # Unix Versions
@@ -67,45 +60,43 @@
 
 	* 5th Edition (June 1974): Unix was installed on more than 50 systems
 
-	* 6th Edition (May 1975): First edition widely used ouside AT&T
+	* 6th Edition (May 1975): First edition widely used outside AT&T
 
 ---
-# Inconvinients are sometimes very convinient
-
+# Inconveniences are sometimes very convenient
 * Over that period of time, UNIX reputation began to spread within AT&T and beyond
 
-* Problem: AT&T could not sell software at the time: it was sanctionated by the US government
+* Problem: AT&T could not sell software at the time: it was sanctioned by the US government
 
-* The provided solution is probably one of the most importants ones in computer science history: at the beginning of 1974 AT&T allowed the use of UNIX within universities
+* The provided solution is probably one of the most important ones in computer science history: at the beginning of 1974 AT&T allowed the use of UNIX within universities
 
 ---
 # Two important variants (BSD and System V)
-
-* January 1979 saw the release of the 7th edition of UNIX, which included a) improved realiability and file systems and b) a number of new tools: awk, make, sed, tar, uucp, the Bourne shell, and a Fortran compiler
+* January 1979 saw the release of the 7th edition of UNIX, which included a) improved reliability and file systems and b) a number of new tools: awk, make, sed, tar, uucp, the Bourne shell, and a Fortran compiler
 
 * From this point UNIX derived into two important variants: BSD Unix and System V
 
-* To understand that divergence we need to go back to 1975/1976, when Thomson (the guy who wrote the first version of UNIX) spent a year as visiting professor at the university of California Berkeley
+* To understand that divergence we need to go back to 1975/1976, when Thomson (the guy who wrote the first version of UNIX) spent a year as visiting professor at the University of California Berkeley
 	* worked with several graduate students adding new features to UNIX such as the C shell, the vi editor, and improved file system, sendmail, a pascal compiler, and virtual memory management system
 * Under the name of Berkeley Software Distribution (BSD) this version of UNIX, including its source code, came to be widely distributed
-* In 983, the computer research group at the university of California released the 4.2BSD version, which contained a significant amount of new code: a complete TCP/IP implementation, including sockets and other networking tools
+* In 1983, the computer research group at the University of California released the 4.2BSD version, which contained a significant amount of new code: a complete TCP/IP implementation, including sockets and other networking tools
 	* This version became very popular among universities around the world
 
 
 ---
 # Two important variants (BSD and System V)
 
-* AT&T's saction was removed during mid-70's and the breakup became effective at the beignning of the 80's 
+* AT&T's ban was removed during mid-70's and the breakup became effective at the beginning of the 80's 
 	* AT&T could then sell software products and commercialize UNIX
 
 * System III was the first version sold by AT&T in 1981
 	* Many developers were employed to develop applications and notably improve documentation
 
-* System V developed in 1989 included many features from BSD (specially network facilities)
+* System V developed in 1989 included many features from BSD (especially network facilities)
 
-*  In addition to various BSD distributions spread through academia, by the end of the 80-s, UNIX was available in a rage of commercial implemenations on variosu hardware
+*  In addition to various BSD distributions spread through academia, by the end of the 80-s, UNIX was available in a range of commercial implementations on various hardware
 
-* Contrary to propietary operating systems, the high availability of UNIX distributions (compliant edither with System V or BSD) made UNIX systems increasingly attractive from a commercial perspective due to portability of applications	
+* Contrary to proprietary operating systems, the high availability of UNIX distributions (compliant either with System V or BSD) made UNIX systems increasingly attractive from a commercial perspective due to portability of applications	
 
 ---
 # UNIX Variants
@@ -125,13 +116,12 @@
 
 ---
 # UNIX Standards
-
 * UNIX development was not controlled by a single vendor or organization
 	* Many groups contributed to its evolution (AT&T, Berkeley, etc.)
 	* Positive side: innovations
-	* Negative side: implementations diverged overtime, making difficult to write UNIX applications
+	* Negative side: implementations diverged over time, making difficult to write UNIX applications
 
-* UNIX and C language standarization 
+* UNIX and C language standardization
 	* Applications can be easily ported from one to another system when conforming to a given standard
 
 * Standards usually made by independent groups
@@ -142,7 +132,6 @@
 * UNIX implementations are referred to the two implementations standards defined by BSD and System V
 
 ---
-
 # The UNIX Architecture
 * Kernel 
 	* Software controlling hardware resources and providing an environment for other programs to execute
@@ -157,9 +146,7 @@
 ![Unix Architecture](./unix.png)
 
 ---
-
 # The UNIX shell
-
 * Interface for every UNIX System
 * A shell is an interpreter
 	* Accepts a command
@@ -176,7 +163,7 @@ pwd
 ---
 
 # The man command
-* `man` : shows information about how system calls, library functions, and other commands work
+* `man`: shows information about how system calls, library functions, and other commands work
 * Basic form: `man (keyword) [manual page]` 
 * Examples of use
 ```bash
@@ -191,7 +178,7 @@ man man
 	* `b` moves one page back
 	* `G` goes to the end of the page
 	* `xG` goes to the page x of the output
-	* `/keyword` goes to appearances of keyword on the output
+	* `/keyword` goes to appearances of the keyword on the output
 	* `q` terminates the command 
 
 * `apropos (keyword)`: searches man pages for a given keyword
@@ -210,35 +197,31 @@ man man
 	* absolute path (starting from the root) e.g., `/usr/sbin/bzip2`
 	* relative paths (regarding the current directory) e.g.,  `../../jonh`
 
-* Every file has associated three type of rights
+* Every file has associated three types of rights
 	* read
 	* write
 	* execute
 
 ---
 # Unix Files
+* File permissions are indicated with 9 bits
 
-* File persmissions are indicated with 9 bits
+* The first 3 indicate the permissions for the owner of the file for reading, writing and executing
 
-* The first 3 indicates the permisions for the owner of the file for reading, writing and executing
-
-* The second group of 3 indicates the permisions for users of the same group as the owner
+* The second group of 3 indicates the permissions for users of the same group as the owner
 
 * The third group indicates the permissions for the rest of users
 
-* These permisions are indicated with the letters r, w, and x
+* These permissions are indicated with the letters `r`, `w`, and `x`
 
 * `chmod`: changes permissions on a file
 
-* `chown`: changes the owner of a file 
+* `chown`: changes the owner of a file
 
 ---
 # Unix Files
 
 ![Unix Architecture](./file-info.png)
-
-
-
 
 ---
 # UNIX commands related to the File System
@@ -251,7 +234,7 @@ cd - #changes to the previous directory
 ```
 * `mkdir`: creates a new directory
 ```bash
-mkdir lib #creates a directory called lib within the curren directory
+mkdir lib #creates a directory called lib within the current directory
 ```
 * `rmdir`: deletes an empty existing directory
 * `ls`: lists the content of a directory
@@ -259,7 +242,7 @@ mkdir lib #creates a directory called lib within the curren directory
 ls -l # lists the content showing detailed information about each file/folder
 ls -F # lists the content indicating the type of each file (executable, regular file, folder)
 ```
-* `file`: showes information about a file
+* `file`: shows information about a file
 ```bash
 file template.txt 
 # template.tex: LaTeX 2e document, ASCII text
@@ -274,7 +257,7 @@ file template.txt
 	* `nano`
 	* `vi`, `vi(m)`
 	* `emacs`
-* `echo`: print something on the output
+* `echo`: prints something on the output
 ```bash
 echo $home #prints the home directory
 echo $OLDPWD #prints the previous directory if exist
@@ -285,9 +268,9 @@ echo hola #prints hola
 	* standard output (`stdout`), where the output is put
 	* standard error (`stderr`), where error messages are put
 
-* `read`: reads something from the input and assign it to a variable
+* `read`: reads from the input and assigns it to a variable
 ```bash
-read a #waits for user to type something
+read a # waits for user to type something
 ```
 
 ---
@@ -295,15 +278,15 @@ read a #waits for user to type something
 * Any command can put the output and error messages to another file or take the input from a different file
 	* redirection
 * UNIX provides the following redirection options
-	* `<`, `>`, `2>` redirect input, output and error
+	* `<`, `>`, `2>` redirect input, output, and error
 ```bash
 cat hola.txt > adios.txt #writes all the content of hola.txt into adios.txt
 read a < hola.txt #reads a line from the file hola.txt and assign it to a
 ls -l out5 2> /dev/null #if ls -l out5 produces an error, it will be written into the /dev/null file
 ```
 	* `A|B` the output of the command `A` becomes the input of the command `B` 
----
 
+---
 # Copying, updating info, and removing files
 * `cp`: copy a file or a directory
 ```bash
@@ -378,14 +361,13 @@ grep XX file || echo "XX not found"
 
 ---
 # Options for command execution
-
 * `history`: shows a list of the commands executed associated with a number
 
 * How to navigate the history?
 
-	* `!!` : executes the last command showed by history
+	* `!!`: executes the last command showed by history
 
-	* `!-n` : executes the n command in history starting from the last one
+	* `!-n`: executes the n command in history starting from the last one
 
 	* `!n`: executes the command number n in history
 
@@ -404,7 +386,7 @@ grep XX file || echo "XX not found"
 	* `{conf,loc}` conf and loc
 
 ```bash
-#assume our folder contais the files out1,out2,out3, out4, progf, and prog.o
+#assume our folder contains the files out1,out2,out3, out4, progf, and prog.o
 ls -l out* # detailed list of out1, out2, out3, and out4
 ls -l [1-3] # detailed list of out1, out2, and out3
 ls -l {1,3} # detailed list of out1, and out3
@@ -413,21 +395,20 @@ ls -l {1,3} # detailed list of out1, and out3
 ---
 
 # Variables
+* Bash allows declaring variables
 
-* Bash allows to declare variables
-
-* A variable consist of any number of letters, digits or undercsores
+* A variable consist of any number of letters, digits or underscores
 	* case sensitive
 	* cannot start with a digit
 	
 * A variable is assigned a value with the `=` operator
-	* there may not be any whitesparece between the variable name and the value
+	* there may not be any whitespace between the variable name and the value
 
 * A variable value can be accessed using the `$` operator
 
-* By default the shell treats variable values as strings, even if the value is a digit
+* By default, the shell treats variable values as strings, even if the value is a digit
 
-* Bash allow to create integer variables using `declare -i`
+* Bash allows creating integer variables using `declare -i`
 
 ```bash
 var1=3+4
@@ -439,7 +420,6 @@ echo $var2 #prints 7
 
 ---
 # Built-in Variables
-
 * Automatically set by the shell and can be used by any command
 
 * `$#`: Number of command-line arguments
@@ -466,22 +446,21 @@ echo $var2 #prints 7
 	* Reads $EVN instead of `~\.bashrc`
 
 * Write commands in a file
-	* First line on the file is the so called sheban #!/bin/bash
+	* First line on the file is the so-called sheban #!/bin/bash
 	* Besides the file name, several arguments can be used
 	* Arguments will be executed one after the next
 
 ---
 # Evaluating conditions
-
 * `test condition`: Evaluate a condition and if the value is true returns 0 as exit status	
 	* Returns nonzero as exist status if the condition is not true
 * `[ condition ]`: similar as before
 * `[[ condition ]]`: similar but does not perform word splitting and path name extensions. It also allows additional operators such as `&&`, `||`, `<`, `>`
 * Some example of conditions (but there are much more)
-	* `-a file`: file exist (deprecated in favour of `-e file`)
+	* `-a file`: file exist (deprecated in favor of `-e file`)
 	* `-d file`: file exist and is a directory
 	* `-f file`: file exist and is a regular file
-	* `-h file`: file exist and is a symbolik link
+	* `-h file`: file exist and is a symbolic link
 	* `-p file`: file exist and is a named pipe (FIFO)
 	* `f1 -nt f2`: file `f1` is newer than `f2`
 	* `string`: string is not null
@@ -550,7 +529,7 @@ done
 ```
 
 ---
-# The while and case command
+# The while and case commands
 ```bash
 while condition
 do
