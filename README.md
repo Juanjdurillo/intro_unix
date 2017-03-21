@@ -397,7 +397,7 @@ ls -l {1,3} # detailed list of out1, and out3
 # Variables
 * Bash allows declaring variables
 
-* A variable consist of any number of letters, digits or underscores
+* A variable consists of any number of letters, digits or underscores
 	* case sensitive
 	* cannot start with a digit
 	
