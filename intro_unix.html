@@ -404,8 +404,8 @@ grep XX file || echo "XX not found"
 ```bash
 #assume our folder contains the files out1,out2,out3, out4, progf, and prog.o
 ls -l out* # detailed list of out1, out2, out3, and out4
-ls -l [1-3] # detailed list of out1, out2, and out3
-ls -l {1,3} # detailed list of out1, and out3
+ls -l out[1-3] # detailed list of out1, out2, and out3
+ls -l out{1,3} # detailed list of out1, and out3
 ```
 
 ---
@@ -538,9 +538,9 @@ do
 done
 ```
 ```bash
-for ((x=1; $x<=20; x+2))
+for ((x=1;$x<=20;x=x+2))
 do
-	grep $1 chap$x
+	cat $1 chap$x
 done
 ```
 
@@ -556,7 +556,7 @@ done
 ```bash
 case value in
 pattern1) cmds1;;
-pattern2)) cmds;;
+pattern2) cmds;;
 esac
 ```
 

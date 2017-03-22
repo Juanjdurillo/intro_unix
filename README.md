@@ -522,9 +522,9 @@ do
 done
 ```
 ```bash
-for ((x=1; $x<=20; x+2))
+for ((x=1;$x<=20;x=x+2))
 do
-	grep $1 chap$x
+	cat $1 chap$x
 done
 ```
 
@@ -540,7 +540,7 @@ done
 ```bash
 case value in
 pattern1) cmds1;;
-pattern2)) cmds;;
+pattern2) cmds;;
 esac
 ```
 
