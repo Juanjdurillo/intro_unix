@@ -5,7 +5,7 @@
 # Creating a new process in UNIX
 # Relation between processes and files
 
-![Files and Processes](./files_and_processes.png)
+![Files and Processes](./files_processes.png)
 ![Files and Processes after a `fork()`](./file_processes_after_fork.png)
 
 
