@@ -18,7 +18,7 @@ pid_t fork(void);
 
 The following is an example of a program that greets us indicating its `pid` (its process id),  creates a child, and says goodbye to us by also indicating its `pid`. In this example only the parent process greets us, but both, parent and child, say goodbye. 
 
-```
+```c
 #include <unistd.h>
 #include <stdio.h>
 
