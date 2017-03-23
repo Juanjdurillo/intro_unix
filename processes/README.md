@@ -4,12 +4,13 @@
 # How does the Kernel manage existing processes?
 # Creating a new process in UNIX
 # Relation between processes and files
-
+---
 ![Files and Processes](./files_processes.png)
-![Files and Processes after a `fork()`](./file_processes_after_fork.png)
 
-
+---
 After creating a new process with `fork()` this picture illustrate the situation of parent and child processes
+
+![Files and Processes after a `fork()`](./file_processes_after_fork.png)
 
 As seen, parent and child processes share the same entry on the open files table. This means, they both share the same offset on the file. When one of them writes (with `write()`) the offset will get modified then for both. The next `write()` operation perform by any of the two processes will be relative to the newly set offset. The following code can be executed to illustrate this effect. In this program, a child process is created. Right after creation, the child is somehow forced to leave the CPU by using `sleep()`. The parent process will most probably be chosen for execution within these 5 seconds, writting the "parent" on the file. When the 5 seconds consume, the child will at some point also chosen for execution and will write "child" on the file right after the word parent. 
 
