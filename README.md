@@ -397,7 +397,7 @@ ls -l {1,3} # detailed list of out1, and out3
 # Variables
 * Bash allows declaring variables
 
-* A variable consist of any number of letters, digits or underscores
+* A variable consists of any number of letters, digits or underscores
 	* case sensitive
 	* cannot start with a digit
 	
@@ -481,7 +481,7 @@ then commands
 [else commands3]
 fi
 ```
-Exmaples:
+Examples:
 ```bash
 if [ $counter -lt 10 ]
 then number=0$counter
@@ -522,9 +522,9 @@ do
 done
 ```
 ```bash
-for ((x=1; $x<=20; x+2))
+for ((x=1;$x<=20;x=x+2))
 do
-	grep $1 chap$x
+	cat $1 chap$x
 done
 ```
 
@@ -540,7 +540,7 @@ done
 ```bash
 case value in
 pattern1) cmds1;;
-pattern2)) cmds;;
+pattern2) cmds;;
 esac
 ```
 
