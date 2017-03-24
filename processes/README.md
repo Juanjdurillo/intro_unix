@@ -5,7 +5,7 @@
 A process is an executing instance of a program. We can view a process as the task of completing all the steps of an algorithm (with a specific input data) whose binary representation exists somewhere in an executable file. To acomplish this, the OS needs to keep some information about the process and a memory image/layout of that process. The former contains information such as process id, process parent id, program counter, etc. The latter includes the code to be executed by the process, environmental information, execution stack, heap, etc. Obviously, the same program can be executed at the same time by different processes. 
 
 # Process information
-In order to be able to manage the execution of different processes, several bits of information are required for each existing process (i.e., instances of pgorams in execution). This information vary from operating system to operating system but in the general case should include:
+In order to be able to manage the execution of different processes, several bits of information are required for each existing process (i.e., instances of pgorams in execution). This information varies from operating system to operating system, but in the general case should include most of the following items:
 
   * Process id (pid), process group, parent process id
   * Process status: running, blocked, waiting, etc (depending on the model followed by the particular OS)
