@@ -71,7 +71,9 @@ As an alternative to `fork()`, UNIX also provide the system call `vfork()`. This
 ![Files and Processes](./files_processes.png)
 
 ---
+
 After creating a new process with `fork()` this picture illustrate the situation of parent and child processes
+
 
 ![Files and Processes after a `fork()`](./file_processes_after_fork.png)
 
@@ -105,3 +107,31 @@ int main(int argc, char **argv) {
 	close(fd);
 }
 ```
+---
+Existing file descriptors can be duplicated within a process. This can be achieved by using any of the two system calls.
+```c
+int dup(int fd);
+int dup2(int fd,int fd2);
+```
+The first variant of `dup()` (with only one argument) returns the number of the file descriptor that points to the same entry in the open file table as the used argument. The returned file desciptor is the lowest-numbered desciptor still available. The second variant, `dup2()`, allows indicating the number of the file descriptor  we want to point to the same entry in the open file table as the first argument. If this descriptor belongs to an open file, the function closes the file for us before the duplication. The following image depicts the process status after performing a call to `dup(1)`.
+
+![Files and Processes after `dup()`](./files_processes_dup.png)
+
+The same net effect can be achieved by using the function `fcntl()` instead of `dup()` or `dup2()`. See bellow:
+```c
+dup(fd);
+```
+is equivalent to 
+```c
+fcntl(fd,F_DUPFD,0);
+```
+The same way
+```
+dup2(fd,fd2);
+```
+is similar to 
+```c
+close(fd2);
+fcntl(fd,F_DUPFD,fd2);
+```
+In this latter case it is important to highlight that the example is similar and not equivalent. `dup2()` performs its operation atomically while closing a descritor followed by the call to `fcntl()` is not atomic. 
