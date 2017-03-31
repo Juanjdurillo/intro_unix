@@ -159,7 +159,7 @@ int main(int argc, char** argv) {
 
 	//we perform the redirection
 
-	//dup2 first closes STDOUT and then it make STDOUT point to the same
+	//dup2 first closes STDOUT and then it makes STDOUT to point to the same
 	//entry in the file open talbe as fd_file (this is done atomically)
 	dup2(fd_file,STDOUT_FILENO); 
 
