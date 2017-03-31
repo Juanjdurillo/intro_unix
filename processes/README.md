@@ -177,3 +177,7 @@ int main(int argc, char** argv) {
 	
 }
 ```
+
+The following picture illustrates what happens in the code above. 
+
+![File redirection](./file_redirection.png)
