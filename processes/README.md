@@ -135,3 +135,45 @@ close(fd2);
 fcntl(fd,F_DUPFD,fd2);
 ```
 In this latter case it is important to highlight that the example is similar and not equivalent. `dup2()` performs its operation atomically while closing a descritor followed by the call to `fcntl()` is not atomic. 
+
+The following shows an example of how the output of a process can be redirected to a file (e.g., what happens for example when you perform `command > redirection_file`). For brevity reasons this program focuses only on the redirection a ommit anything else. 
+
+```c
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdio.h>
+
+
+// Idea: what is written in the file descriptor 1 (STDOUT)
+// should go to the file, not to the standard output
+
+int main(int argc, char** argv) {
+
+	int fd_file=open("redirection_file",O_CREAT|O_TRUNC|O_RDWR, 0666);
+	if (!fd_file) {
+		perror("Error when opening the redirection_file");
+		_exit(-1);
+	} 
+
+	//we perform the redirection
+
+	//dup2 first closes STDOUT and then it make STDOUT point to the same
+	//entry in the file open talbe as fd_file (this is done atomically)
+	dup2(fd_file,STDOUT_FILENO); 
+
+	//we close fd_file since we are not going to use it directly since
+	//the file descriptor STDOUT points now to the file fd_file points
+	close(fd_file);
+
+	//we perform now some tests
+	printf("Without redirection this message should appear on the terminal\n");
+	printf("As we are redirecting to a file, if you are reading this, then\n");
+	printf("you are reading the file redirection_file\n");
+
+  //printf is buffered
+	fflush(stdout);
+	
+}
+```
