@@ -236,4 +236,4 @@ int main(int argc, char** argv) {
 }
 ```
 
-Using `signal()` has however some limitations we will analyse soon. Therefore, instead of using `signal()` it is preferible to use `sigaction()`. 
+Using `signal()` has however some limitations. The main problem is that its behaviour varies across different UNIX and Linux versions. This behavioru mainly refers to two cases: whether the default handler is set back automatically after the first execution of this handler; and what happens when a signal is received while executing the handler of another signal. `sigaction()` is the alternative to `signal()`. Besides providing extra functionality over `signal()`, `sigaction()` allows to specify the exact behavior of the two cases mentioned before.  
