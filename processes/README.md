@@ -237,3 +237,94 @@ int main(int argc, char** argv) {
 ```
 
 Using `signal()` has however some limitations. The main problem is that its behaviour varies across different UNIX and Linux versions. This behavioru mainly refers to two cases: whether the default handler is set back automatically after the first execution of this handler; and what happens when a signal is received while executing the handler of another signal. `sigaction()` is the alternative to `signal()`. Besides providing extra functionality over `signal()`, `sigaction()` allows to specify the exact behavior of the two cases mentioned before.  
+
+## Dealing with signals: creating sets of signals
+Unix offers a data type to represent multiple signals. This data type is known as _signal set_. In POSIX.1 this data type is `sigset_t`. Several functions are offered to specify to work with this set. These functions are:
+```c
+int sigemptyset(sigset_t *set); // Creates an empty set of signals
+int sigaddset(sigset_t *set, int signo); // Add the signal specified by signo to the set
+int sigdelset(sigset_t *set, int signo); // Removes the signal from the set 
+int sigismember(sigset_t *set, int signo);// Is the signal on the set?
+```
+
+## Dealing with signals: blocking singals
+Unix offers the possibility that a process (or a thread) block the reception of a group of signals. More specifically, it is said that some signals are _masked_ by the process. Signals that belong to the _signal mask_ of the process are blocked. To modify the _signal mask_ of a process, UNIX offers the function `sigprocmask`.
+```c
+int sigprocmask(int how, const sigset_t *restrict set, sigset_t *restrict ofset);
+```
+The `sigprocmask` function requires a bit of explaination. Let start with the second parameter _set_. This parameter specifies the set of signals we are interesting in blocking (or unblocking). The third parameter if non-null, is used to retrieve the current _signal mask_. The first parameter determines the behaviour of the function. In particular we have the following options:
+
+|How|Descripton                                                                                   |
+|---|---------------------------------------------------------------------------------------------|
+| SIG_BLOCK | The signal mask of the process becomes the union of set and the current signal mask |
+| SIG_UNBLOCK | The signals indicated in set are removed from the signal mask of the process      |
+| SIG_SETMASK | The second parameter becomes the signal mask of the process                       |
+
+It is important to be aware that some signals cannot be blocked (i.e., they cannot be part of the signal mask of the process). 
+
+The following example modifies the previosu program so it blocks the SIGINT signal for the process. Therefoere, even if we hold down the keys ctrl+c the program does not react to it. 
+
+```c
+#include <signal.h>
+#include <stdio.h>
+
+void signal_handler(int signalNumber) {
+	printf("I do not finish when you print ctr+c. Make me finish using another method\n");
+}
+
+int main(int argc, char** argv) {
+	void (*previous_handler)(int);
+	previous_handler = signal(SIGINT,signal_handler);
+
+	sigset_t set;
+	sigemptyset(&set);
+	sigaddset(&set,SIGINT);
+	sigprocmask(SIG_BLOCK,&set,NULL);
+
+	
+	while (1) {;} // do something useful here; this is just an example!
+	
+}
+```
+
+## Dealing with signals the right way: the sigaction function
+`sigaction` allows examining and modifying the action associated with a particular signal. It actually can be use as replacement for the behaviur intented before with `signal`. 
+The signature of sigaction differs from signal
+```c
+#include <signal.h>
+int sigaction(int signo, const struct sigaction *act, sstruct sigaction *oact );
+```
+The first argument is as in `signal`, the number of the signal for what we want to change the behaviour. If the second parameter is non-null then act is an structure indicating what to do when _signo_ is received. If the third argument is non-null, this function stores there the previous action for that signal. 
+
+Let us dive a bit into the struct sigaction data structure. This structure may vary from system to sytem, but at least we should find the following fields:
+```c
+struct sigaction {
+  void (*sa_handler) (int); // Here we store the function to call when the function is received
+  sigset_t sa_mask; // Additional signals to block while dealing with signo
+  int sa_flags; // Options indicating how the handler should behave
+  ... more
+}
+```
+Once we install a signal handler with sigaction, this handler remains there until we change it with another call to sigaction. The following piece of code shows how to use `sigaction` instead of `signal` to change the behaviour upon receiving the signal produced by holding down the combination ctrl+c. 
+
+```c
+#include <signal.h>
+#include <stdio.h>
+
+void signal_handler(int signalNumber) {
+	printf("I do not finish when you print ctr+c. Make me finish using another method\n");
+}
+
+int main(int argc, char** argv) {
+	
+	struct sigaction new_action;
+
+
+	new_action.sa_handler = signal_handler;
+	sigemptyset(&new_action.sa_mask);
+	sigaction(SIGINT,&new_action,NULL);
+	
+	while (1) {;} // do something useful here; this is just an example!
+	
+}
+```
