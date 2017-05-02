@@ -328,3 +328,33 @@ int main(int argc, char** argv) {
 	
 }
 ```
+
+#Pipes and FIFOs
+Pipes and FIFO are mechanisms for interprocess communication. Pipes (already in Third Edition of UNIX) are older than FIFO. Pipes allow to communicate related processes while FIFOs are a variation of this concept allowing communication between any process in the system. 
+
+## Pipes: general information
+A pipe is an unidirectional byte stream with two ends. An end for writing and and end for reading. Unix provide access to these ends as they were files within the file system. 
+
+A process can write information into the writing end. Another related process (even the same) can read that information by reading from the read end. Bytes are read in the same order in which they are written. Random access to information within the pipe is not possible (i.e., it is not possible to perform an lseek()). 
+
+A process can read from a pipe using `read()`. When a process reads from a pipe which is empty it blocks until at least a byte has been written. If the writibg end of the pipe is already closed (no process is expected to write) then the read will see the end-of-file and a read() operation will return 0 once all the data in the pipe has been read. A call to `read()` returns either the number of byte requested or the number of bytes within the pipe if it contains less bytes than requested.
+
+A process can write into the writing end using `write()`. If many processes attempt writing at the same time, their messages can interleave (issue which won't happen if no more than `PIPE_BUF` bytes are written at a time). As pipes can be limited in size, a call to `write()` may block until enough space is available. 
+
+## Creating pipes
+
+A pipe can be created with the following system call
+```c
+#include <unistd.h>
+int pipe(int filedes [2]);
+```
+On success the previous system call returns two open file descriptors into the array filedes: one for the read end of the pipe at filedes[0] and one for the writing end of the pipe at filedes[1]. A pipe has few uses within a single process. Normally, pipes are used to communicate two related processes. This is done by calling `fork() ` after creating a `pipe()`. The following image illustrate this behaviour. 
+
+![Pipe and Fork](./pipes_and_process_fork.png)
+
+![Pipe, Fork and closing unused descriptors](./pipes_and_process_fork_after_closing.png)
+
+It is important that each process closes these ends of the pipe it is not going to use. This is: the process that is going to read from the pipe should close its writing end. The process that is going to write into the pipe should close ists read end. The reasons are not only to avoid exhausting the number of available descriptors. Opened endes for a pipe also define the behaviour of `write()` and `read()`. 
+
+If the reading process does not close the end for `writing()`, then a call to `read()` will never see the end-of-the-file (potentially there is a process, itself, that has the writting end opened).
+The writing process should also close the read end. A process that attempts to write to a pipe where there is no process waiting to read will receive the signal SIGPIPE resulting in terminating the process. 
