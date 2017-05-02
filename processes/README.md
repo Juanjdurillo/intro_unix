@@ -358,3 +358,24 @@ It is important that each process closes these ends of the pipe it is not going 
 
 If the reading process does not close the end for `writing()`, then a call to `read()` will never see the end-of-the-file (potentially there is a process, itself, that has the writting end opened).
 The writing process should also close the read end. A process that attempts to write to a pipe where there is no process waiting to read will receive the signal SIGPIPE resulting in terminating the process. 
+
+## FIFOs
+FIFOs and pipes are semantically equivalent. The only difference is that a FIFO has actually a name within the file system while pipes are anonimous. The fact that they have a name allows unrelated processes communicating using it. 
+
+A FIFO can be created in any of the two following ways:
+```bash
+# via command line
+$ mkfifo pathname
+```
+
+```c
+// via system calls
+#include <sys/stat.h>
+int mkfifo(const char *pathname, mode_t mode);
+//mode specifies the permissions for the fifo
+```
+Once created any process can open the FIFO as it were a file (and if its has the rights to do so).
+
+Things to bare in mind: opening a FIFO for reading blocks until another process opens the fifo for writing. The opposite is also true: opening a FIFO for writing blocks until another process has the FIFO opened for reading. 
+
+The following two tables describe the semantics of the call open for a FIFO and the calls read() and wrrite() for pipes and FIFOs. 
