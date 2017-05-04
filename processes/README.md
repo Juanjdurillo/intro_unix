@@ -378,4 +378,63 @@ Once created any process can open the FIFO as it were a file (and if its has the
 
 Things to bare in mind: opening a FIFO for reading blocks until another process opens the fifo for writing. The opposite is also true: opening a FIFO for writing blocks until another process has the FIFO opened for reading. 
 
-The following two tables describe the semantics of the call open for a FIFO and the calls read() and wrrite() for pipes and FIFOs. 
+## Waiting for input in more than one descriptor using `select()`
+As described before, a process can block when opening a descriptor representing a FIFO or when reading from a pipe or FIFO. When a process needs to read from several FIFOs, for example,  this blocking behaviour may imply the process blocks forever in a FIFO in which there is no data available and ignore other FIFOs where data is available. To avoid this behaviour the system call `select()` allows monitoring a set of descriptors to check wether is possible to read from them, write on them, or excepcional conditions have happened. The signature of `select()` is as follows:
+
+```c
+int select(int nfds , fd_set * readfds , fd_set * writefds , fd_set * exceptfds ,
+struct timeval * timeout );
+```
+
+We analyse the parameter `nfds` after examigating the others. The _readfds_ parameter is a set containing the descriptors that the process should monitor for reading. The _writefds_ is a set containing the descriptors that the process should monitor to see if it is possible to write on them. The _exceptfds_ is the set of descriptors the process is checking to see if exceptional conditions have happened (see man page for this last). All these sets are of the type `fd_set`. As  with `sigset_t` several macros are provided to work with this data type. In particular, the following macros are provided:
+
+```c
+void FD_ZERO(fd_set * fdset );
+void FD_SET(int fd , fd_set * fdset );
+void FD_CLR(int fd , fd_set * fdset );
+int FD_ISSET(int fd , fd_set * fdset );
+```
+The last argument allows to specify the interval of time the process will block on the select(). 
+
+Finally, the first arugment `nfds` should be the maximum descriptor included in any the sets _readfds_, _writefds_, and _exceptfds_ plus one. This parameter is needed for efficiency. 
+
+The following example partially shows how to use `select()` :
+
+```c
+   int fd_error = -1, fd_info = -1, fd_warning = -1;
+   int maxfd=-1; 
+
+   fd_error   = open_and_check(ERROR);
+   maxfd = (fd_error > maxfd) ? fd_error : maxfd;
+
+   fd_warning = open_and_check(WARNING);
+   maxfd = (fd_warning > maxfd) ? fd_warning : maxfd;
+   
+   fd_info    = open_and_check(INFO);   
+   maxfd = (fd_info > maxfd) ? fd_info : maxfd;	
+
+   int i = 0;
+   while (1) {
+     
+      fd_set readfds;
+      FD_ZERO(&readfds);
+      
+      FD_SET(fd_error,&readfds);
+      FD_SET(fd_info,&readfds);
+      FD_SET(fd_warning,&readfds);
+
+      int ready = select(maxfd+1,&readfds,NULL,NULL,NULL);
+
+      if (ready > 0) {
+         if (FD_ISSET(fd_error,&readfds))
+	          read_from(fd_error,"Error");
+         if (FD_ISSET(fd_warning,&readfds))
+	          read_from(fd_warning,"Warning");
+         if (FD_ISSET(fd_info,&readfds))
+           read_from(fd_info,"Info");
+      }
+      
+      
+
+   }
+```
