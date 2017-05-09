@@ -2,38 +2,38 @@
 
 # What is a process?
 
-A process is an executing instance of a program. We can view a process as the task of completing all the steps of an algorithm (with a specific input data) whose binary representation exists somewhere in an executable file. To acomplish this, the OS needs to keep some information about the process and a memory image/layout of that process. The former contains information such as process id, process parent id, program counter, etc. The latter includes the code to be executed by the process, environmental information, execution stack, heap, etc. Obviously, the same program can be executed at the same time by different processes. 
+A process is an executing instance of a program. We can view a process as the task of completing all the steps of an algorithm (with a specific input data) whose binary representation exists somewhere in an executable file. To accomplish  this, the OS needs to keep some information about the process and a memory image/layout of that process. The former contains information such as process id, process parent id, program counter, etc. The latter includes the code to be executed by the process, environmental information, execution stack, heap, etc. Obviously, the same program can be executed at the same time by different processes. 
 
 # Process information
-In order to be able to manage the execution of different processes, several bits of information are required for each existing process (i.e., instances of pgorams in execution). This information varies from operating system to operating system, but in the general case should include most of the following items:
+In order to be able to manage the execution of different processes, several bits of information are required for each existing process (i.e., instances of programs in execution). This information varies from operating system to operating system, but in the general case should include most of the following items:
 
-  * Process id (pid), process group, parent process id
-  * Process status: running, blocked, waiting, etc (depending on the model followed by the particular OS)
-  * Priority 
-  * Memory pointers to user address space (we will refer later to this memory as process memory image)
-  * Context data/Hardware counters (program counter, stack pointer, floating points registers, etc)
-  * Program counter (i.e., memory location of the next instruction to be executed)
-  * Accounting information
-  * Credentials (user id, group id)
-  * Environment variables, although they can be also stored in user address space
-  * Other control information (kernel stack, address translation maps)
-  * I/O status information (root directory, working directory, file descriptors table)
-  * Signaling information (singals to be delivered, etc.)
+* Process id (PID), process group, parent process id
+* Process status: running, blocked, waiting, etc (depending on the model followed by the particular OS)
+* Priority 
+* Memory pointers to user address space (we will refer later to this memory as process memory image)
+* Context data/Hardware counters (program counter, stack pointer, floating point registers, etc)
+* Program counter (i.e., memory location of the next instruction to be executed)
+* Accounting information
+* Credentials (user id, group id)
+* Environment variables, although they can be also stored in user address space
+* Other control information (kernel stack, address translation maps)
+* I/O status information (root directory, working directory, file descriptors table)
+* Signaling information (signals to be delivered, etc.)
 
 All that information is stored in a data structure created and maintained by the kernel. That data structure is typically referred to as **process control block (PCB)**. The kernel maintains a table of them to manage all existing processes. This table is usually referred to as **process table**.
 
 *Information on this section has been extracted from William Stallings. "Operating Systems, Internals and Design Principles", Andrew S. Tanembaum, Herbert Bos. "Modern Operating Systems", and Uresh Vahalia. "UNIX Internals, the new frontiers."* 
 
 # Process memory image
-In this case the focus is he memory layout/image of a process on Linux. This image is composed of different parts, which in the context of linux are referred to as segments. Different SOs may use different process layouts. In the case of Linux, a process memory layout consists of the following segments:
+In this case, the focus is the memory layout/image of a process on Linux. This image is composed of different parts, which in the context of Linux are referred to as segments. Different SOs may use different process layouts. In the case of Linux, a process memory layout consists of the following segments:
 
-* Text segment. Instructions of the program to execute (binary code to be executed). This is an only-read segment.
-* Initialized data segment (a.k.a. *user-initialized data segment*). Global and static variables initialized explicitely initialized.
-* Unitialized data segment (a.k.a. *zero-initialized data segment*). Global and static variables non explicitely initialized. 
-* The stack. This segment contains execution stack of the program. Obviously this segment will grow and schrink dynamically due to the program execution (call to functions, finishing the execution of functions, etc.). The stack also stores every variable defined locally within functions.
-* The heap. Memory to store data allocate dynamically at runtime (e.g., with `malloc()` or `calloc()`). The top of the heap is called *program break*. 
+* Text segment. Instructions of the program to execute (binary code to be executed). This is an only read segment.
+* Initialized data segment (a.k.a. *user-initialized data segment*). Global and static variables initialized explicitly initialized.
+* Uninitialized data segment (a.k.a. *zero-initialized data segment*). Global and static variables not explicitly initialized. 
+* The stack. This segment contains execution stack of the program. Obviously, this segment will grow and shrink dynamically due to the program execution (call to functions, finishing the execution of functions, etc.). The stack also stores every variable defined locally within functions.
+* The heap. Memory to store data allocate dynamically at runtime (e.g., with `malloc()` or `calloc()`). The top of the heap is called *program break*.
 
-Every process has the view that it spans over a certain amount of memory (e.g., 4GB or the addressableRAM). Only a few portions of a program are stored in the RAM during the process execution. This is achieve through a technique called **Virtual Memory**. This technique then allow different processes to be *in memory* at the same time (and to share some memory among them!), while still having the impression of span over a bigger amount of memory. For the explanations here it is enough if we assume that every proces span over the whole addressable memory. 
+Every process has the view that it spans over a certain amount of memory (e.g., 4GB or the addressableRAM). Only a few portions of a program are stored in the RAM during the process execution. This is achieved through a technique called **Virtual Memory**. This technique then allow different processes to be *in memory* at the same time (and to share some memory among them!), while still having the impression of span over a bigger amount of memory. For the explanations here it is enough if we assume that every process span over the whole addressable memory.
 
 The following picture depicts an abstraction of a process view of the physical memory of the machine.  
 ![Process memory layout](./process_memory_layout.png)
@@ -41,9 +41,10 @@ The following picture depicts an abstraction of a process view of the physical m
 
 *Information on this section has been extracted from Michael Kerrisk. "The Linux Programming Interface"*
 # Creating a new process in UNIX
-In the UNIX OS a process can be created from an existing process. For that to happen, the existing process executes the system call `fork()`. Usually, the process that executes the `fork()` is referred to as *parent* process, and the process created with `fork()` is called *child process*. The child process is an exact copy of the parent. This means: its memory image is exactly as the in the parent process. When a `fork()` system call is performed, the kernel also created the PCB associated to the new child process. 
 
-After the call to `fork()` any of both the prent process or the child process may be selected by the kernel for execution (indeed any existing process within the kernel can be chosen for execution. The selection depends on many factors (e.g., process priority)). Both parent and child keep exeucting from the next instruction after the fork (therefore, it is a mistake to think that the child process peforms the execution of the program from the beginning). The only difference between parent and child is that the value returned by `fork()` is different in both: for the parent it returns the `pid` of the newly created child. For the child it returns 0. 
+In UNIX a process can be created from an existing process. For that to happen, the existing process executes the system call `fork()`. Usually, the process that executes the `fork()` is referred to as *parent* process and the process created with `fork()` is called *child process*. The child process is an exact copy of the parent. This means: its memory image is exactly as in the parent process. When a `fork()` system call is performed, the kernel also created the PCB associated with the new child process.
+
+After the call to `fork()` any of both the parent process or the child process may be selected by the kernel for execution (indeed any existing process within the kernel can be chosen for execution. The selection depends on many factors (e.g., process priority)). Both, parent and child keep executing the next instruction after the fork (therefore, it is a mistake to think that the child process performs the execution of the program from the beginning). The only difference between parent and child is that the value returned by `fork()` is different in both: for the parent, it returns the `PID` of the newly created child. For the chi, d it returns 0. 
 
 The syntax of the fork() is pretty straightforward.
 ```c
@@ -51,7 +52,7 @@ The syntax of the fork() is pretty straightforward.
 pid_t fork(void);
 ```
 
-The following is an example of a program that greets us indicating its `pid` (its process id),  creates a child, and says goodbye to us by also indicating its `pid`. In this example only the parent process greets us, but both, parent and child, say goodbye. 
+The following is an example of a program that greets us indicating its `PID`,  creates a child, and says goodbye to us by also indicating its `PID`. In this example only the parent process greets us, but both, parent and child, say goodbye. 
 
 ```c
 #include <unistd.h>
@@ -64,7 +65,7 @@ int main(int argc, char **argv) {
 }
 ```
 
-As an alternative to `fork()`, UNIX also provide the system call `vfork()`. This latter reuses the memory image of the original process and is intended only for programs which will perform a call to any form of `execv()` right after the call to `vfork()`. In addition, Linux provides the system call `clone()`, which allows a fine control of what is shared between the parent process and the child process. `clone()` is used also to create execution threads (lightweight process in Linux).
+As an alternative to `fork()`, UNIX also provide the system call `vfork()`. This latter reuses the memory image of the original process and is intended only for programs which will perform a call to any form of `execv()` right after the call to `vfork()`. In addition, Linux provides the system call `clone()`, which allows a fine control of what is shared between the parent process and the child process. `clone()` is used also to create execution threads (a lightweight process in Linux).
 
 # Relation between processes and files
 ---
@@ -77,7 +78,7 @@ After creating a new process with `fork()` this picture illustrate the situation
 
 ![Files and Processes after a `fork()`](./file_processes_after_fork.png)
 
-As seen, parent and child processes share the same entry on the open files table. This means, they both share the same offset on the file. When one of them writes (with `write()`) the offset will get modified then for both. The next `write()` operation perform by any of the two processes will be relative to the newly set offset. The following code can be executed to illustrate this effect. In this program, a child process is created. Right after creation, the child is somehow forced to leave the CPU by using `sleep()`. The parent process will most probably be chosen for execution within these 5 seconds, writing the "parent" on the file. When the 5 seconds consume, the child will at some point also chosen for execution and will write "child" on the file right after the word parent. 
+As seen, parent and child processes share the same entry in the open files table. This means they both share the same offset on the file. When one of them writes (with `write()`) the offset will get modified then for both. The next `write()` operation performed by any of the two processes will be relative to the newly set offset. The following code can be executed to illustrate this effect. In this program, a child process is created. Right after creation, the child is somehow forced to leave the CPU by using `sleep()`. The parent process will most probably be chosen for execution within these 5 seconds, writing the "parent" on the file. When the five seconds consume, the child will at some point also chosen for execution and will write "child" on the file right after the word parent. 
 
 ```c
 #include <sys/types.h>
@@ -113,11 +114,11 @@ Existing file descriptors can be duplicated within a process. This can be achiev
 int dup(int fd);
 int dup2(int fd,int fd2);
 ```
-The first variant of `dup()` (with only one argument) returns the number of the file descriptor that points to the same entry in the open file table as the used argument. The returned file desciptor is the lowest-numbered desciptor still available. The second variant, `dup2()`, allows indicating the number of the file descriptor  we want to point to the same entry in the open file table as the first argument. If this descriptor belongs to an open file, the function closes the file for us before the duplication. The following image depicts the process status after performing a call to `dup(1)`.
+The first variant of `dup()` (with only one argument) returns the number of the file descriptor that points to the same entry in the open file table as the used argument. The returned file descriptor is the lowest-numbered descriptor still available. The second variant, `dup2()`, allows indicating the number of the file descriptor we want to point to the same entry in the open file table as the first argument. If this descriptor belongs to an open file, the function closes the file for us before the duplication. The following image depicts the process status after performing a call to `dup(1)`.
 
 ![Files and Processes after `dup()`](./files_processes_dup.png)
 
-The same net effect can be achieved by using the function `fcntl()` instead of `dup()` or `dup2()`. See bellow:
+The same net effect can be achieved by using the function `fcntl()` instead of `dup()` or `dup2()`. See below:
 ```c
 dup(fd);
 ```
@@ -134,9 +135,9 @@ is similar to
 close(fd2);
 fcntl(fd,F_DUPFD,fd2);
 ```
-In this latter case it is important to highlight that the example is similar and not equivalent. `dup2()` performs its operation atomically while closing a descritor followed by the call to `fcntl()` is not atomic. 
+In this latter case, it is important to highlight that the example is similar and not equivalent. `dup2()` performs its operation atomically while closing a descriptor followed by the call to `fcntl()` is not atomic.
 
-The following shows an example of how the output of a process can be redirected to a file (e.g., what happens for example when you perform `command > redirection_file`). For brevity reasons this program focuses only on the redirection a ommit anything else. 
+The following shows an example of how the output of a process can be redirected to a file (e.g., what happens for example when you perform `command > redirection_file`). For brevity reasons, this program focuses only on the redirection and omits anything else.
 
 ```c
 #include <sys/types.h>
@@ -184,13 +185,13 @@ The following picture illustrates what happens in the code above.
 
 # Signals
 
-Signals are the most basic interpocess communication form in UNIX. Singals are usually send to processes for indicating an envent has happened. In some context signals ar referred to as "software interrupts". The reason is that upon receiving a signal, a process jumps into executing a specific function for dealing with the signal. Once that function has been executed, the process keeps executiong the next instruction that would have executed if the signal would have not arrived. 
+Signals are the most basic interprocess communication form in UNIX. Signals are usually sent to processes for indicating an event has happened. In some context, signals are referred to as "software interrupts". The reason is that upon receiving a signal, a process jumps into executing a specific function for dealing with the signal (therefore interrupting its current flow). Once that function has been executed, the process keeps executing the next instruction that would have executed if the signal would not have arrived.
 
 Signals can be sent from one process to another, from one process to itself, or from the kernel to a process. Examples of when signals are sent to a process are:
 
 * when the user types _cntrl+c_
 * after setting an alarm
-* aftera child process has finished
+* after a child process has finished
 * etc
 
 A process can send a signal to another process using the system call `kill()`. 
@@ -199,7 +200,7 @@ When a process receives a signal, it can:
 * ignore the signal
 * finish its execution
 * resume its execution if stopped
-* call a specific function for dealing with that signal and afteward keep the execution 
+* call a specific function for dealing with that signal and afterward keep the execution
 
 Every signal has associated a different integer number and a name, which typically starts with the prefix SIG. Signals are defined in the header `<signal.h>`.
 
